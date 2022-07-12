@@ -77,9 +77,10 @@ func SplitData(filePath string) (params []string, props map[string]string) {
 	return paramsData, m
 }
 
-func ReadFromNte() (notice *model.Notice) {
+func ReadFromNte() (noticeList []*model.Notice) {
 
 	filePathList := GetNtcFilePath(noticeDir)
+	var notice *model.Notice
 	for _, filePath := range filePathList {
 		recvId := GetRecvId(filePath)
 		params, props := SplitData(filePath)
@@ -95,10 +96,9 @@ func ReadFromNte() (notice *model.Notice) {
 				Params:  params[1:],
 				Props:   props,
 			}
+			noticeList = append(noticeList, notice)
 		}
 	}
-
 	defer f.Close()
-
-	return notice
+	return noticeList
 }
