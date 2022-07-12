@@ -7,8 +7,6 @@ import (
 	"mongo_demo/util/notice"
 )
 
-//
-
 func main() {
 	var err error
 	var collection *mongo.Collection
@@ -26,7 +24,7 @@ func main() {
 
 	err = db.DisconnectDB()
 	if err != nil {
-		fmt.Printf("connect to db failed, err:%v\n", err)
+		fmt.Printf("disconnect to db failed, err:%v\n", err)
 	}
 
 }
