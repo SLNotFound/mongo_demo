@@ -17,7 +17,7 @@ func main() {
 
 	nte := notice.ReadFromNte()
 
-	err = db.InsertDataToNtcs(collection, nte)
+	db.InsertDataToNtcs(collection, nte)
 	if err != nil {
 		fmt.Println("err: ", err)
 	}
