@@ -9,6 +9,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 var noticeDir = "F:\\msg\\5A163DE9-731E-0072-8FCF-1F38E80D6B5F\\notice"
@@ -87,14 +88,15 @@ func ReadFromNte() (noticeList []*model.Notice) {
 		method, _ := strconv.Atoi(params[0])
 		if method == 800 {
 			notice = &model.Notice{
-				Method:  method,
-				PcRead:  0,
-				MobRead: 0,
-				SendId:  params[2],
-				RecvId:  recvId,
-				MsgId:   params[1],
-				Params:  params[1:],
-				Props:   props,
+				Method:     method,
+				CreateTime: time.Now().UnixMicro(),
+				PcRead:     0,
+				MobRead:    0,
+				SendId:     params[2],
+				RecvId:     recvId,
+				MsgId:      params[1],
+				Params:     params[1:],
+				Props:      props,
 			}
 			noticeList = append(noticeList, notice)
 		}
