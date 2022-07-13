@@ -55,7 +55,6 @@ func SplitData(filePath string) (params []string, props map[string]string) {
 	var dataList []string
 	for scanner.Scan() {
 		dataList = append(dataList, scanner.Text())
-
 	}
 
 	if err = scanner.Err(); err != nil {
