@@ -1,14 +1,14 @@
 package model
 
 type Notice struct {
-	Method     int
-	CreateTime int64
-	PcRead     int
-	MobRead    int
-	SendId     string
-	RecvId     string
-	MsgId      string
-	Params     []string
+	Method     int      `bson:"method"`
+	CreateTime int64    `bson:"createTime"`
+	PcRead     int      `bson:"pcRead"`
+	MobRead    int      `bson:"mobRead"`
+	SendId     string   `bson:"sendId"`
+	RecvId     string   `bson:"recvId"`
+	MsgId      string   `bson:"msgId"`
+	Params     []string `bson:"params"`
 
-	Props map[string]string
+	Props map[string]string `bson:"props"`
 }
