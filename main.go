@@ -22,9 +22,5 @@ func main() {
 		fmt.Println("err: ", err)
 	}
 
-	err = db.DisconnectDB()
-	if err != nil {
-		fmt.Printf("disconnect to db failed, err:%v\n", err)
-	}
-
+	defer db.DisconnectDB()
 }

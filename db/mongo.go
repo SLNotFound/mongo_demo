@@ -25,10 +25,6 @@ func ConnectDB() (collection *mongo.Collection, err error) {
 	return collection, nil
 }
 
-func DisconnectDB() (err error) {
-	err = client.Disconnect(context.TODO())
-	if err != nil {
-		return err
-	}
-	return nil
+func DisconnectDB() {
+	_ = client.Disconnect(context.TODO())
 }
