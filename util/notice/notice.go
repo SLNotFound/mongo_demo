@@ -98,34 +98,60 @@ func ReadFromNte() (noticeList []*model.Notice) {
 		method, _ := strconv.Atoi(params[0])
 		createTime, _ := strconv.Atoi(params[len(params)-1])
 
-		switch method {
-		case 800:
-			notice = &model.Notice{
-				Method:     method,
-				CreateTime: createTime,
-				PcRead:     0,
-				MobRead:    0,
-				SendId:     params[2],
-				RecvId:     recvId,
-				MsgId:      msgId,
-				Params:     params[1:],
-				Props:      props,
-			}
-			noticeList = append(noticeList, notice)
-		case 820:
-			notice = &model.Notice{
-				Method:     method,
-				CreateTime: createTime,
-				PcRead:     0,
-				MobRead:    0,
-				SendId:     params[2],
-				RecvId:     recvId,
-				MsgId:      msgId,
-				Params:     params[1:],
-				Props:      props,
-			}
-			noticeList = append(noticeList, notice)
+		notice = &model.Notice{
+			Method:     method,
+			CreateTime: createTime,
+			PcRead:     0,
+			MobRead:    0,
+			SendId:     params[2],
+			RecvId:     recvId,
+			MsgId:      msgId,
+			Params:     params[1:],
+			Props:      props,
 		}
+		noticeList = append(noticeList, notice)
+		//switch method {
+		//case 800:
+		//	notice = &model.Notice{
+		//		Method:     method,
+		//		CreateTime: createTime,
+		//		PcRead:     0,
+		//		MobRead:    0,
+		//		SendId:     params[2],
+		//		RecvId:     recvId,
+		//		MsgId:      msgId,
+		//		Params:     params[1:],
+		//		Props:      props,
+		//	}
+		//	noticeList = append(noticeList, notice)
+		//case 820:
+		//	notice = &model.Notice{
+		//		Method:     method,
+		//		CreateTime: createTime,
+		//		PcRead:     0,
+		//		MobRead:    0,
+		//		SendId:     params[2],
+		//		RecvId:     recvId,
+		//		MsgId:      msgId,
+		//		Params:     params[1:],
+		//		Props:      props,
+		//	}
+		//	noticeList = append(noticeList, notice)
+		//default:
+		//	notice = &model.Notice{
+		//		Method:     method,
+		//		CreateTime: createTime,
+		//		PcRead:     0,
+		//		MobRead:    0,
+		//		SendId:     params[2],
+		//		RecvId:     recvId,
+		//		MsgId:      msgId,
+		//		Params:     params[1:],
+		//		Props:      props,
+		//	}
+		//	noticeList = append(noticeList, notice)
+		//}
+
 	}
 	defer f.Close()
 	return noticeList

@@ -26,5 +26,4 @@ func main() {
 	db.InsertDataToMsgs(c2, msgList)
 
 	defer db.DisconnectDB()
-
 }
