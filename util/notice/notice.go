@@ -3,15 +3,17 @@ package notice
 import (
 	"bufio"
 	"fmt"
+	"go.mongodb.org/mongo-driver/mongo"
 	"io/ioutil"
 	"log"
+	"mongo_demo/db"
 	"mongo_demo/model"
 	"os"
 	"strconv"
 	"strings"
 )
 
-var noticeDirArr = [2]string{"F:\\msg\\5A163DE9-731E-0072-8FCF-1F38E80D6B5F\\notice", "F:\\msg\\5A163DE9-731E-0072-8FCF-1F38E80D6B5F\\notice_mob"}
+var noticeDirArr = [2]string{"F:\\msg\\A0332914-C8FF-ED46-7A54-20AF8BF497D0\\notice", "F:\\msg\\A0332914-C8FF-ED46-7A54-20AF8BF497D0\\notice_mob"}
 
 var f *os.File
 
@@ -87,72 +89,57 @@ func GetMsgId(msgFilePath string) string {
 	return msgId[0]
 }
 
-func ReadFromNte() (noticeList []*model.Notice) {
+func ReadFromNte() {
 
+	var c1 *mongo.Collection
+	if err := db.ConnectDB(); err != nil {
+		fmt.Printf("connect to db failed, err:%v\n", err)
+	}
+	c1 = db.Client.Database("notice").Collection("ntcs")
+	ntc1 := make(chan *model.Notice)
+	ntc2 := make(chan *model.Notice)
 	filePathList := GetNtcFilePath(noticeDirArr)
 	var notice *model.Notice
-	for _, filePath := range filePathList {
-		recvId := GetRecvId(filePath)
-		msgId := GetMsgId(filePath)
-		params, props := SplitData(filePath)
-		method, _ := strconv.Atoi(params[0])
-		createTime, _ := strconv.Atoi(params[len(params)-1])
 
-		notice = &model.Notice{
-			Method:     method,
-			CreateTime: createTime,
-			PcRead:     0,
-			MobRead:    0,
-			SendId:     params[2],
-			RecvId:     recvId,
-			MsgId:      msgId,
-			Params:     params[1:],
-			Props:      props,
+	go func() {
+		for _, filePath := range filePathList {
+			recvId := GetRecvId(filePath)
+			msgId := GetMsgId(filePath)
+			params, props := SplitData(filePath)
+			method, _ := strconv.Atoi(params[0])
+			createTime, _ := strconv.Atoi(params[len(params)-1])
+
+			notice = &model.Notice{
+				Method:     method,
+				CreateTime: createTime,
+				PcRead:     0,
+				MobRead:    0,
+				SendId:     params[2],
+				RecvId:     recvId,
+				MsgId:      msgId,
+				Params:     params[1:],
+				Props:      props,
+			}
+			//noticeList = append(noticeList, notice)
+			ntc1 <- notice
 		}
-		noticeList = append(noticeList, notice)
-		//switch method {
-		//case 800:
-		//	notice = &model.Notice{
-		//		Method:     method,
-		//		CreateTime: createTime,
-		//		PcRead:     0,
-		//		MobRead:    0,
-		//		SendId:     params[2],
-		//		RecvId:     recvId,
-		//		MsgId:      msgId,
-		//		Params:     params[1:],
-		//		Props:      props,
-		//	}
-		//	noticeList = append(noticeList, notice)
-		//case 820:
-		//	notice = &model.Notice{
-		//		Method:     method,
-		//		CreateTime: createTime,
-		//		PcRead:     0,
-		//		MobRead:    0,
-		//		SendId:     params[2],
-		//		RecvId:     recvId,
-		//		MsgId:      msgId,
-		//		Params:     params[1:],
-		//		Props:      props,
-		//	}
-		//	noticeList = append(noticeList, notice)
-		//default:
-		//	notice = &model.Notice{
-		//		Method:     method,
-		//		CreateTime: createTime,
-		//		PcRead:     0,
-		//		MobRead:    0,
-		//		SendId:     params[2],
-		//		RecvId:     recvId,
-		//		MsgId:      msgId,
-		//		Params:     params[1:],
-		//		Props:      props,
-		//	}
-		//	noticeList = append(noticeList, notice)
-		//}
+		close(ntc1)
+	}()
 
+	go func() {
+		for {
+			i, ok := <-ntc1
+			if !ok {
+				break
+			}
+			ntc2 <- i
+		}
+		close(ntc2)
+	}()
+
+	for i := range ntc2 {
+		db.InsertDataToNtcs(c1, i)
 	}
 	defer f.Close()
-	return noticeList
+	//return noticeList
 }
