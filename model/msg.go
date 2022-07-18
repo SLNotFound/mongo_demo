@@ -25,5 +25,5 @@ type Msg struct {
 	MsgFlag      int    `bson:"msg_flag"`
 	MsgStatus    int    `bson:"msg_status"`
 	MsgType      int    `bson:"msg_type"`
-	SendDate     int64  `bson:"send_date"`
+	SendDate     int    `bson:"send_date"`
 }

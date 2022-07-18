@@ -2,7 +2,7 @@ package model
 
 type Notice struct {
 	Method     int      `bson:"method"`
-	CreateTime int64    `bson:"createTime"`
+	CreateTime int      `bson:"createTime"`
 	PcRead     int      `bson:"pcRead"`
 	MobRead    int      `bson:"mobRead"`
 	SendId     string   `bson:"sendId"`

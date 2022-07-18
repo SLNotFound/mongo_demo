@@ -7,8 +7,8 @@ import (
 	"log"
 	"mongo_demo/model"
 	"os"
+	"strconv"
 	"strings"
-	"time"
 )
 
 var f *os.File
@@ -113,6 +113,7 @@ func ReadDataFromMsg() (msgList []*model.Msg, date string) {
 		dataMap := SplitData(msgFilePath)
 		recvId, recvUser := GetReceiver(dataMap)
 		msgId := GetMsgId(msgFilePath)
+		sendDate, _ := strconv.Atoi(dataMap["senddate"])
 		msg = &model.Msg{
 			MsgId:        msgId,
 			Subject:      dataMap["subject"],
@@ -138,7 +139,7 @@ func ReadDataFromMsg() (msgList []*model.Msg, date string) {
 			MsgFlag:      0,
 			MsgStatus:    0,
 			MsgType:      0,
-			SendDate:     time.Now().UnixMicro(),
+			SendDate:     sendDate,
 		}
 
 		msgList = append(msgList, msg)
