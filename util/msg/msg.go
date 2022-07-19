@@ -44,22 +44,6 @@ func GetDate(msgFileDir string) string {
 	return tempList[len(tempList)-2]
 }
 
-//func GetSendId(msgFileList []string) (sendIdList []string) {
-//	var m = make(map[string]string)
-//	for _, msgFile := range msgFileList {
-//		split := strings.Split(msgFile, ".")
-//		if len(split) > 1 {
-//			fmt.Sprintf("%#v", split)
-//			m[split[0]] = strings.Trim(split[1], " ")
-//		}
-//	}
-//	for key, _ := range m {
-//		sendIdList = append(sendIdList, key)
-//	}
-//
-//	return sendIdList
-//}
-
 func GetMsgId(msgFilePath string) string {
 	split := strings.Split(msgFilePath, "\\")
 	msgFile := split[len(split)-1]
